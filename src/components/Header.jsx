@@ -4,12 +4,12 @@ import { Button } from './ui/button'
 
 function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 w-full z-50 bg-[#0f0f11]/80 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-neutral-200/60 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Left Side: Name Link */}
         <Link
           to="/"
-          className="text-lg sm:text-xl font-bold tracking-tight text-white hover:text-neutral-300 transition-colors no-underline whitespace-nowrap"
+          className="text-lg sm:text-xl font-bold tracking-tight text-neutral-900 hover:text-neutral-600 transition-colors no-underline whitespace-nowrap"
         >
           Shreya Gujarkar
         </Link>
