@@ -8,9 +8,9 @@ function PhotoBoothWindow() {
   const [flash, setFlash] = useState(false)
 
   const photos = [
+    '/photos/photo-3.jpg',
     '/photos/photo-1.jpg',
     '/photos/photo-2.jpg',
-    '/photos/photo-3.jpg',
     '/photos/photo-4.jpg',
     '/photos/photo-5.jpg',
   ]
