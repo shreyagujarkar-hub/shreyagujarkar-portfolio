@@ -1,16 +1,29 @@
 import { useState } from 'react'
-import { Camera, Sparkles, Grid2X2, Video, Square } from 'lucide-react'
+import { Camera, Sparkles, Grid2X2, Video, Square, ChevronLeft, ChevronRight } from 'lucide-react'
 
 function PhotoBoothWindow() {
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0)
   const [activeEffect, setActiveEffect] = useState('Normal')
-  const [mode, setMode] = useState('single') // 'single' | 'burst' | 'video'
+  const [mode, setMode] = useState('single')
   const [flash, setFlash] = useState(false)
+
+  const photos = [
+    '/photos/photo-1.jpg',
+    '/photos/photo-2.jpg',
+    '/photos/photo-3.jpg',
+    '/photos/photo-4.jpg',
+    '/photos/photo-5.jpg',
+  ]
 
   const effects = ['Normal', 'Glow', 'Warm', 'Mono']
 
   const handleSnap = () => {
     setFlash(true)
-    setTimeout(() => setFlash(false), 180)
+    setTimeout(() => {
+      setFlash(false)
+      // Smoothly advance to next snapshot on shutter click
+      setActivePhotoIdx((prev) => (prev + 1) % photos.length)
+    }, 180)
   }
 
   const getFilterStyle = () => {
@@ -28,7 +41,7 @@ function PhotoBoothWindow() {
 
   return (
     <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-[480px] xl:max-w-[510px] rounded-2xl sm:rounded-3xl bg-[#1e1e22] text-white backdrop-blur-3xl border border-white/25 shadow-[0_30px_70px_rgba(0,0,0,0.35),0_10px_24px_rgba(0,0,0,0.2)] overflow-hidden transition-all duration-300 hover:shadow-[0_35px_85px_rgba(0,0,0,0.45)] hover:-translate-y-1 select-none flex flex-col will-change-transform">
-      {/* macOS Window Header Bar */}
+      {/* macOS Window Title Bar */}
       <div className="h-10 px-4 bg-gradient-to-b from-[#3a3a3f] to-[#2a2a2e] border-b border-[#18181b] flex items-center justify-between shrink-0">
         {/* Traffic Light Buttons */}
         <div className="flex items-center gap-2">
@@ -46,12 +59,13 @@ function PhotoBoothWindow() {
         <div className="w-14" /> {/* Optical balance spacer */}
       </div>
 
-      {/* Viewfinder Stage */}
+      {/* Main Viewfinder Stage */}
       <div className="relative aspect-[4/3.8] bg-[#0c0c0e] overflow-hidden group">
         <img
-          src="/hero.jpg"
-          alt="Portrait of Shreya Gujarkar"
-          className={`w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-103 ${getFilterStyle()}`}
+          key={activePhotoIdx}
+          src={photos[activePhotoIdx]}
+          alt={`Photo Booth snapshot ${activePhotoIdx + 1}`}
+          className={`w-full h-full object-cover object-center transition-all duration-300 ease-out group-hover:scale-102 ${getFilterStyle()}`}
         />
 
         {/* Flash Animation on Snap */}
@@ -59,18 +73,35 @@ function PhotoBoothWindow() {
           <div className="absolute inset-0 bg-white z-30 transition-opacity duration-150" />
         )}
 
-        {/* Top Viewfinder Badge Overlays */}
+        {/* Top Viewfinder Overlays */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-20">
           <span className="bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-mono text-neutral-200 tracking-wider border border-white/10">
-            LIVE • 4K
+            {activePhotoIdx + 1} OF {photos.length}
           </span>
           <span className="bg-black/60 backdrop-blur-md px-3 py-0.5 rounded-full text-[10.5px] font-medium text-neutral-200 border border-white/10">
             Shreya Gujarkar
           </span>
         </div>
 
-        {/* Subtle Inner Border Vignette */}
-        <div className="absolute inset-0 rounded-none ring-1 ring-inset ring-white/10 pointer-events-none" />
+        {/* Subtle Next/Previous Hover Arrows */}
+        <button
+          onClick={() => setActivePhotoIdx((prev) => (prev === 0 ? photos.length - 1 : prev - 1))}
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border border-white/10 z-20"
+          title="Previous Photo"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <button
+          onClick={() => setActivePhotoIdx((prev) => (prev + 1) % photos.length)}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border border-white/10 z-20"
+          title="Next Photo"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+
+        {/* Inner Border Ring */}
+        <div className="absolute inset-0 ring-1 ring-inset ring-white/10 pointer-events-none" />
       </div>
 
       {/* Application Control Bar */}
@@ -109,7 +140,7 @@ function PhotoBoothWindow() {
         {/* Center: Red Circular Shutter Button */}
         <button
           onClick={handleSnap}
-          title="Take Photo"
+          title="Take Photo / Next Snapshot"
           className="w-10 h-10 rounded-full bg-red-500 hover:bg-red-600 active:scale-90 border-2 border-white/90 shadow-[0_4px_12px_rgba(239,68,68,0.4)] flex items-center justify-center transition-all duration-150 cursor-pointer"
         >
           <Camera className="w-5 h-5 text-white drop-shadow-xs" />
@@ -135,18 +166,32 @@ function PhotoBoothWindow() {
 
       {/* Bottom Photo Reel Strip / Tray */}
       <div className="px-4 pb-3.5 pt-1.5 bg-[#1a1a1d] flex items-center gap-2.5 overflow-x-auto border-t border-black/40">
-        <div className="w-16 h-12 rounded-xl border-2 border-blue-500 overflow-hidden shrink-0 shadow-md relative group cursor-pointer">
-          <img src="/hero.jpg" alt="Active Thumbnail" className="w-full h-full object-cover" />
-          <span className="absolute bottom-0 right-0 bg-blue-600 text-[8px] font-bold px-1.5 py-0.5 rounded-tl-md">
-            1
-          </span>
-        </div>
-        <div className="w-16 h-12 rounded-xl border border-neutral-700/80 bg-neutral-800/60 overflow-hidden shrink-0 flex items-center justify-center text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer">
-          <Sparkles className="w-4 h-4 text-neutral-500" />
-        </div>
-        <div className="w-16 h-12 rounded-xl border border-neutral-700/80 bg-neutral-800/60 overflow-hidden shrink-0 flex items-center justify-center text-neutral-500 hover:text-neutral-300 transition-colors cursor-pointer">
-          <Square className="w-4 h-4 text-neutral-500" />
-        </div>
+        {photos.map((photo, idx) => {
+          const isSelected = activePhotoIdx === idx
+          return (
+            <button
+              key={photo}
+              onClick={() => setActivePhotoIdx(idx)}
+              className={`relative w-16 h-12 rounded-xl overflow-hidden shrink-0 transition-all duration-200 cursor-pointer ${
+                isSelected
+                  ? 'border-2 border-blue-500 ring-2 ring-blue-500/40 shadow-md scale-105 z-10'
+                  : 'border border-neutral-700/80 opacity-65 hover:opacity-100 hover:border-neutral-500'
+              }`}
+              title={`Snapshot ${idx + 1}`}
+            >
+              <img
+                src={photo}
+                alt={`Thumbnail ${idx + 1}`}
+                className="w-full h-full object-cover"
+              />
+              {isSelected && (
+                <span className="absolute bottom-0 right-0 bg-blue-600 text-[8px] font-bold px-1.5 py-0.5 rounded-tl-md text-white">
+                  {idx + 1}
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
