@@ -13,7 +13,7 @@ const projects = [
     category: 'UX Research · Service Design',
     year: '2024',
     color: '#4B96F3',
-    description: 'Redesigning the regulatory experience for India's medical education system.',
+    description: "Redesigning the regulatory experience for India's medical education system.",
   },
   {
     slug: 'basis',
