@@ -33,26 +33,27 @@ function MacDock() {
       ),
     },
     {
-      id: 'safari',
-      name: 'About',
-      path: '/about',
+      id: 'me',
+      name: 'Me',
+      path: '/',
       isExternal: false,
       icon: (
         <svg className="w-full h-full drop-shadow-md" viewBox="0 0 100 100" fill="none">
-          <rect width="100" height="100" rx="22" fill="url(#safari-grad)" />
-          {/* Compass Bezel */}
-          <circle cx="50" cy="50" r="37" fill="#F8FAFC" />
-          <circle cx="50" cy="50" r="34" stroke="#CBD5E1" strokeWidth="2" strokeDasharray="3 3" fill="none" />
-          {/* Compass Needle */}
-          <polygon points="50,16 58,50 50,46" fill="#EF4444" />
-          <polygon points="50,16 42,50 50,46" fill="#DC2626" />
-          <polygon points="50,84 58,50 50,54" fill="#E2E8F0" />
-          <polygon points="50,84 42,50 50,54" fill="#94A3B8" />
-          <circle cx="50" cy="50" r="3.5" fill="#0F172A" />
+          <rect width="100" height="100" rx="22" fill="url(#pb-grad)" />
+          {/* Camera Body */}
+          <rect x="20" y="30" width="60" height="45" rx="8" fill="#F8FAFC" />
+          {/* Flash */}
+          <rect x="70" y="38" width="5" height="5" rx="2.5" fill="#E2E8F0" />
+          <rect x="71" y="39" width="3" height="3" rx="1.5" fill="#FCD34D" />
+          {/* Lens Outer Ring */}
+          <circle cx="50" cy="52" r="16" fill="#94A3B8" />
+          {/* Lens Inner */}
+          <circle cx="50" cy="52" r="12" fill="#0F172A" />
+          <circle cx="53" cy="49" r="3" fill="#FFFFFF" opacity="0.4" />
           <defs>
-            <linearGradient id="safari-grad" x1="0" y1="0" x2="0" y2="100">
-              <stop stopColor="#60A5FA" />
-              <stop offset="1" stopColor="#1D4ED8" />
+            <linearGradient id="pb-grad" x1="0" y1="0" x2="0" y2="100">
+              <stop stopColor="#F472B6" />
+              <stop offset="1" stopColor="#E11D48" />
             </linearGradient>
           </defs>
         </svg>

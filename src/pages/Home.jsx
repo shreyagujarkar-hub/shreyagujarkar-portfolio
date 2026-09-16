@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import MacMenuBar from '../components/MacMenuBar'
 import MacDock from '../components/MacDock'
 import PhotoBoothWindow from '../components/PhotoBoothWindow'
@@ -6,6 +7,32 @@ import MusicWidget from '../components/MusicWidget'
 import FaceTimeWidget from '../components/FaceTimeWidget'
 
 function Home() {
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.98 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 260,
+        damping: 20,
+      },
+    },
+  }
+
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-sky-100 flex flex-col font-sans select-none">
       {/* 1. Desktop Wallpaper Background */}
@@ -28,20 +55,30 @@ function Home() {
       {/* 3. Main Desktop Workspace Canvas */}
       <main className="relative z-10 flex-1 pt-12 pb-28 sm:pb-32 px-4 sm:px-6 lg:px-10 max-w-7xl w-full mx-auto flex flex-col justify-center items-center">
         
-        {/* Desktop Layout: Layered & Scattered Windows */}
-        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center justify-items-center my-auto">
-          
-          {/* Left / Center-Left: Apple Notes Intro Window */}
-          <div className="lg:col-span-6 w-full flex flex-col items-center lg:items-end order-2 lg:order-1 z-20">
-            <NotesWindow />
-          </div>
-
-          {/* Center / Center-Right: Primary Photo Booth Window (Focal Anchor) */}
-          <div className="lg:col-span-6 w-full flex flex-col items-center lg:items-start order-1 lg:order-2 z-30 lg:-ml-4">
+        {/* Animated Workspace Container */}
+        <motion.div 
+          className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-8 my-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {/* Primary Window: Photo Booth */}
+          <motion.div 
+            variants={itemVariants}
+            className="w-full flex justify-center lg:justify-end lg:w-[55%] z-30"
+          >
             <PhotoBoothWindow />
-          </div>
+          </motion.div>
 
-        </div>
+          {/* Secondary Window: Notes */}
+          <motion.div 
+            variants={itemVariants}
+            className="w-full flex justify-center lg:justify-start lg:w-[45%] lg:pt-8 z-20 lg:-ml-12 xl:-ml-16"
+          >
+            <NotesWindow />
+          </motion.div>
+
+        </motion.div>
 
         {/* Floating Secondary Widgets (Bottom Corners / Flanks) */}
         <div className="w-full max-w-6xl mt-6 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 justify-items-center items-center z-20">

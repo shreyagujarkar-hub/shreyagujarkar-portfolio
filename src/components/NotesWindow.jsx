@@ -96,33 +96,18 @@ function NotesWindow() {
 
           {/* Primary Bio / Intro Body */}
           {selectedNote === 'intro' && (
-            <div className="space-y-3 text-xs sm:text-[13px] text-neutral-700 leading-relaxed">
+            <div className="space-y-3.5 text-xs sm:text-[13px] text-neutral-700 leading-relaxed">
               <p>
-                I design digital experiences that make complex things feel simple. I like figuring out messy problems and turning them into intuitive, useful, and delightful experiences.
+                I’m a design student who enjoys understanding people, finding the little problems hiding in everyday experiences, and turning those insights into thoughtful design.
+              </p>
+              <p>
+                I’m especially interested in Design Research and Service Design, but I also love getting my hands dirty with visual design, storytelling and creative experiments.
+              </p>
+              <p>
+                Think of this space as a little peek into the person behind the work.
               </p>
 
-              {/* What I Focus On */}
-              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 space-y-1.5 text-xs">
-                <div className="font-bold text-amber-950">
-                  📌 Core Focus:
-                </div>
-                <ul className="space-y-1 text-neutral-700 pl-1">
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                    <span>Product (UI/UX) Design for complex platforms</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                    <span>User research & information architecture</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                    <span>Design systems & interactive prototyping</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="pt-1 flex items-center justify-between text-[11.5px]">
+              <div className="pt-2 flex items-center justify-between text-[11.5px]">
                 <span className="text-neutral-500 italic">
                   Explore my projects in Finder below ↓
                 </span>
