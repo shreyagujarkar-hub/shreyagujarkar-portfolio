@@ -1,4 +1,6 @@
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import MacMenuBar from '../components/MacMenuBar'
 import MacDock from '../components/MacDock'
 import PhotoBoothWindow from '../components/PhotoBoothWindow'
@@ -7,30 +9,52 @@ import MusicWidget from '../components/MusicWidget'
 import FaceTimeWidget from '../components/FaceTimeWidget'
 
 function Home() {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  }
+  const location = useLocation()
+  
+  // By default, on page load, the desktop is clean.
+  const [isPhotoBoothOpen, setIsPhotoBoothOpen] = useState(false)
+  const [isNotesOpen, setIsNotesOpen] = useState(false)
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.98 },
+  // Open the workspace when the "Me" dock icon is clicked (which passes state.openMe)
+  useEffect(() => {
+    if (location.state?.openMe) {
+      setIsPhotoBoothOpen(true)
+      setIsNotesOpen(true)
+    }
+  }, [location.state?.openMe])
+
+  // Animation variants
+  const pbVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
       transition: {
         type: 'spring',
-        stiffness: 260,
-        damping: 20,
-      },
+        stiffness: 300,
+        damping: 25,
+        duration: 0.4
+      }
     },
+    exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
+  }
+
+  const notesVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 280,
+        damping: 25,
+        delay: 0.15, // Staggered slightly after Photo Booth
+        duration: 0.4
+      }
+    },
+    exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
   }
 
   return (
@@ -53,32 +77,40 @@ function Home() {
       <MacMenuBar />
 
       {/* 3. Main Desktop Workspace Canvas */}
-      <main className="relative z-10 flex-1 pt-12 pb-28 sm:pb-32 px-4 sm:px-6 lg:px-10 max-w-7xl w-full mx-auto flex flex-col justify-center items-center">
+      <main className="relative z-10 flex-1 pt-12 pb-32 px-4 sm:px-6 lg:px-10 max-w-7xl w-full mx-auto flex flex-col justify-center items-center">
         
-        {/* Animated Workspace Container */}
-        <motion.div 
-          className="w-full flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-8 my-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Primary Window: Photo Booth */}
-          <motion.div 
-            variants={itemVariants}
-            className="w-full flex justify-center lg:justify-end lg:w-[55%] z-30"
-          >
-            <PhotoBoothWindow />
-          </motion.div>
+        {/* Workspace Container (Centered visually) */}
+        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 my-auto min-h-[500px]">
+          
+          <AnimatePresence>
+            {isPhotoBoothOpen && (
+              <motion.div 
+                variants={pbVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="w-full lg:w-auto flex justify-center z-30"
+              >
+                <PhotoBoothWindow onClose={() => setIsPhotoBoothOpen(false)} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* Secondary Window: Notes */}
-          <motion.div 
-            variants={itemVariants}
-            className="w-full flex justify-center lg:justify-start lg:w-[45%] lg:pt-8 z-20 lg:-ml-12 xl:-ml-16"
-          >
-            <NotesWindow />
-          </motion.div>
+          <AnimatePresence>
+            {isNotesOpen && (
+              <motion.div 
+                variants={notesVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="w-full lg:w-auto flex justify-center z-20"
+              >
+                <NotesWindow onClose={() => setIsNotesOpen(false)} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        </motion.div>
+        </div>
 
         {/* Floating Secondary Widgets (Bottom Corners / Flanks) */}
         <div className="w-full max-w-6xl mt-6 lg:mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 justify-items-center items-center z-20">

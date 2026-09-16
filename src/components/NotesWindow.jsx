@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Folder, SquarePen, Search, Share, CheckCircle2, Sparkles, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-function NotesWindow() {
+function NotesWindow({ onClose }) {
   const [selectedNote, setSelectedNote] = useState('intro')
 
   const notesList = [
@@ -32,7 +32,7 @@ function NotesWindow() {
       <div className="h-10 px-3.5 bg-[#F4EFE2]/95 border-b border-[#E5DEC9] flex items-center justify-between shrink-0">
         {/* Left: Window Traffic Lights */}
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] cursor-pointer hover:opacity-85 transition-opacity" />
+          <button onClick={onClose} className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] cursor-pointer hover:opacity-85 transition-opacity outline-none" aria-label="Close Notes" />
           <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] cursor-pointer hover:opacity-85 transition-opacity" />
           <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] cursor-pointer hover:opacity-85 transition-opacity" />
         </div>

@@ -205,7 +205,12 @@ function MacDock() {
                   {appButton}
                 </a>
               ) : (
-                <Link to={item.path} title={item.name} className="outline-none">
+                <Link 
+                  to={item.path} 
+                  state={item.id === 'me' ? { openMe: Date.now() } : undefined}
+                  title={item.name} 
+                  className="outline-none"
+                >
                   {appButton}
                 </Link>
               )}
